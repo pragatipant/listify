@@ -13,7 +13,6 @@ import 'reactjs-popup/dist/index.css';
 const ListComponent = (props) => { 
     const [input, setInput] = useState('');
     const [list, setList] = useState([]);
-    const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
     const addTask = () => { 
         if (input !== "") { 
@@ -41,12 +40,7 @@ const ListComponent = (props) => {
             updatedList[index].details= editedItemDetails 
             setList(updatedList); 
         } 
-    } 
-    const viewTask = (index) => { 
-        console.log(list[index].title)
-        console.log(list[index].details)
-
-    } 
+    }
 
     return(
             <Container> 
@@ -103,8 +97,7 @@ const ListComponent = (props) => {
                                             <span> 
                                                 <Popup trigger={
                                                     <Button style={{marginRight:"10px"}}
-                                                        variant = "light"
-                                                        onClick={() => viewTask(id)}> 
+                                                        variant = "light"> 
                                                         View 
                                                     </Button> 
                                                     } position="right center">
