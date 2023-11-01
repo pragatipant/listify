@@ -6,20 +6,25 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button"; 
 import InputGroup from "react-bootstrap/InputGroup"; 
 import FormControl from "react-bootstrap/FormControl"; 
-import ListGroup from "react-bootstrap/ListGroup"; 
+import ListGroup from "react-bootstrap/ListGroup";
+import Calendar from 'react-calendar';
 
 const ListComponent = (props) => { 
     const [input, setInput] = useState('');
     const [list, setList] = useState([]);
+    const [showCal, setShowCal] = useState(false);
+    const [calDate, setCalDate] = useState(new Date());
 
     const addTask = () => { 
         if (input !== "") { 
             const taskToAdd = { 
                 id: Math.random(),
                 value: input, 
+                date: calDate,
             };
             setList([...list, taskToAdd]);
             setInput('');
+            setCalDate(new Date());
         } 
     } 
 
@@ -65,11 +70,18 @@ const ListComponent = (props) => {
                                 aria-describedby="basic-addon2"
                             />
                             <Button 
+                                variant="info"
+                                className="btn-lg"
+                                onClick={() => setShowCal(!showCal)}>
+                                {calDate.toDateString().toString()}
+                            </Button>  
+                            <Button 
                                 variant="dark"
                                 className="btn-lg"
                                 onClick={() => addTask()}> 
                                 ADD 
                             </Button>  
+                            {showCal && <Calendar minDate={new Date()} onChange={setCalDate} value={calDate}/>}
                         </InputGroup> 
                     </Col> 
                 </Row> 
@@ -83,7 +95,7 @@ const ListComponent = (props) => {
                                             variant="dark"
                                             action 
                                             style={{display:"flex", justifyContent:'space-between'}}> 
-                                            {item.value} 
+                                            {item.value + "\n Due: " + item.date}
                                             <span> 
                                                 <Button style={{marginRight:"10px"}} 
                                                     variant = "light"
