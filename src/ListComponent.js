@@ -8,9 +8,12 @@ import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl"; 
 import ListGroup from "react-bootstrap/ListGroup"; 
 
+
 const ListComponent = (props) => { 
     const [input, setInput] = useState('');
     const [list, setList] = useState([]);
+    const [done, complete] = useState(true);
+
 
     const addTask = () => { 
         if (input !== "") { 
@@ -31,6 +34,21 @@ const ListComponent = (props) => {
     const editTask = (index) => { 
         /* add here */
     } 
+
+    const handleChange = (id)=>{
+        const filteredList = list.filter((item) => item.id !== id);
+            console.log(id)
+            if(id ==="done")
+            {
+                if(done===true){
+                    console.log(id)
+              }
+
+            }
+            setList(filteredList); 
+       
+    }
+
 
     return(
             <Container> 
@@ -94,6 +112,7 @@ const ListComponent = (props) => {
                                                     onClick={() => editTask(id)}> 
                                                     Edit 
                                                 </Button> 
+                                              <input type = "checkbox" value={done} onChange={()=>handleChange("done")} /> done
                                             </span> 
                                         </ListGroup.Item> 
                                     </div> 
