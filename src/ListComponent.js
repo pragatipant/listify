@@ -27,6 +27,7 @@ const ListComponent = (props) => {
             };
             setList([...list, taskToAdd]);
             setInput('');
+            setShowCal(false);
             setCalDate(new Date());
         } 
     } 
@@ -115,6 +116,7 @@ const ListComponent = (props) => {
                                                     } position="right center">
                                                         <div><b>Title:</b> {item.title}</div>
                                                         <div><b>Details:</b> {item.details}</div>
+                                                        <div><b>Due Date:</b> {item.date.toDateString().toString()}</div>
                                                 </Popup>
                                                 
                                                 <Button style={{marginRight:"10px"}} 
