@@ -7,6 +7,8 @@ import Button from "react-bootstrap/Button";
 import InputGroup from "react-bootstrap/InputGroup"; 
 import FormControl from "react-bootstrap/FormControl"; 
 import ListGroup from "react-bootstrap/ListGroup"; 
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
 
 const ListComponent = (props) => { 
     const [input, setInput] = useState('');
@@ -16,7 +18,8 @@ const ListComponent = (props) => {
         if (input !== "") { 
             const taskToAdd = { 
                 id: Math.random(),
-                value: input, 
+                title: input,
+                details: ''
             };
             setList([...list, taskToAdd]);
             setInput('');
@@ -29,8 +32,15 @@ const ListComponent = (props) => {
     } 
 
     const editTask = (index) => { 
-        /* add here */
-    } 
+        let updatedList = [...list]; 
+        const editedItemTitle = prompt('Edit the list item title:'); 
+        const editedItemDetails = prompt('Edit the list item details:'); 
+        if (editedItemTitle !== null && editedItemTitle.trim() !== '') { 
+            updatedList[index].title= editedItemTitle 
+            updatedList[index].details= editedItemDetails 
+            setList(updatedList); 
+        } 
+    }
 
     return(
             <Container> 
@@ -83,8 +93,18 @@ const ListComponent = (props) => {
                                             variant="dark"
                                             action 
                                             style={{display:"flex", justifyContent:'space-between'}}> 
-                                            {item.value} 
+                                            {item.title} 
                                             <span> 
+                                                <Popup trigger={
+                                                    <Button style={{marginRight:"10px"}}
+                                                        variant = "light"> 
+                                                        View 
+                                                    </Button> 
+                                                    } position="right center">
+                                                        <div><b>Title:</b> {item.title}</div>
+                                                        <div><b>Details:</b> {item.details}</div>
+                                                </Popup>
+                                                
                                                 <Button style={{marginRight:"10px"}} 
                                                     variant = "light"
                                                     onClick={() => deleteTask(item.id)}> 
@@ -101,8 +121,9 @@ const ListComponent = (props) => {
                             })} 
                         </ListGroup> 
                     </Col> 
-                </Row> 
+                </Row>
             </Container> 
+
         ) 
 } 
 
