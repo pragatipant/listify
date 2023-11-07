@@ -10,9 +10,12 @@ import ListGroup from "react-bootstrap/ListGroup";
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 
+
 const ListComponent = (props) => { 
     const [input, setInput] = useState('');
     const [list, setList] = useState([]);
+    const [done, complete] = useState(true);
+
 
     const addTask = () => { 
         if (input !== "") { 
@@ -41,6 +44,21 @@ const ListComponent = (props) => {
             setList(updatedList); 
         } 
     }
+
+    const handleChange = (id)=>{
+        const filteredList = list.filter((item) => item.id !== id);
+            console.log(id)
+            if(id ==="done")
+            {
+                if(done===true){
+                    console.log(id)
+              }
+
+            }
+            setList(filteredList); 
+       
+    }
+
 
     return(
             <Container> 
@@ -114,6 +132,7 @@ const ListComponent = (props) => {
                                                     onClick={() => editTask(id)}> 
                                                     Edit 
                                                 </Button> 
+                                              <input type = "checkbox" value={done} onChange={()=>handleChange("done")} /> done
                                             </span> 
                                         </ListGroup.Item> 
                                     </div> 
