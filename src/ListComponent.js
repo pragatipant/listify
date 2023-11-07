@@ -7,6 +7,7 @@ import Button from "react-bootstrap/Button";
 import InputGroup from "react-bootstrap/InputGroup"; 
 import FormControl from "react-bootstrap/FormControl"; 
 import ListGroup from "react-bootstrap/ListGroup"; 
+import Calendar from 'react-calendar';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 
@@ -14,18 +15,22 @@ import 'reactjs-popup/dist/index.css';
 const ListComponent = (props) => { 
     const [input, setInput] = useState('');
     const [list, setList] = useState([]);
+    const [showCal, setShowCal] = useState(false);
+    const [calDate, setCalDate] = useState(new Date());
     const [done, complete] = useState(true);
-
 
     const addTask = () => { 
         if (input !== "") { 
             const taskToAdd = { 
                 id: Math.random(),
                 title: input,
+                date: calDate,
                 details: ''
             };
             setList([...list, taskToAdd]);
             setInput('');
+            setShowCal(false);
+            setCalDate(new Date());
         } 
     } 
 
@@ -93,11 +98,18 @@ const ListComponent = (props) => {
                                 aria-describedby="basic-addon2"
                             />
                             <Button 
+                                variant="info"
+                                className="btn-lg"
+                                onClick={() => setShowCal(!showCal)}>
+                                {calDate.toDateString().toString()}
+                            </Button>  
+                            <Button 
                                 variant="dark"
                                 className="btn-lg"
                                 onClick={() => addTask()}> 
                                 ADD 
                             </Button>  
+                            {showCal && <Calendar minDate={new Date()} onChange={setCalDate} value={calDate}/>}
                         </InputGroup> 
                     </Col> 
                 </Row> 
@@ -121,6 +133,7 @@ const ListComponent = (props) => {
                                                     } position="right center">
                                                         <div><b>Title:</b> {item.title}</div>
                                                         <div><b>Details:</b> {item.details}</div>
+                                                        <div><b>Due Date:</b> {item.date.toDateString().toString()}</div>
                                                 </Popup>
                                                 
                                                 <Button style={{marginRight:"10px"}} 
