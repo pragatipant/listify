@@ -2,6 +2,14 @@
 
 This is the repository for Listify: the simple To-Do list application. Created for Agile Software Development Methods -- Fall 2023.
 
+## Running Instructions
+
+To run the most updated/stable version of Listify, please do the following:
+- Verify you have npm and git installed locally on your machine. This will be necessary to run the application.
+- Using git, checkout branch **main**
+- Run `npm install` to download any packages or libraries needed for this application.
+- Run `npm start` and go to http://localhost:3000/ in your browser to interact with the application.
+
 ## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
