@@ -146,6 +146,7 @@ const ListComponent = (props) => {
                                                     Edit 
                                                 </Button> 
                                               <input type = "checkbox" value={done} onChange={()=>handleChange("done")} /> done
+                                              <span style={done?{textDecoration:"line-through"}:null} > {item.title}</span>
                                             </span> 
                                         </ListGroup.Item> 
                                     </div> 
