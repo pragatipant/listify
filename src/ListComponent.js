@@ -9,6 +9,7 @@ import FormControl from "react-bootstrap/FormControl";
 import ListGroup from "react-bootstrap/ListGroup"; 
 import Calendar from 'react-calendar';
 import Popup from 'reactjs-popup';
+import Modal from 'react-modal';
 import 'reactjs-popup/dist/index.css';
 
 
@@ -18,7 +19,7 @@ const ListComponent = (props) => {
     const [showCal, setShowCal] = useState(false);
     const [calDate, setCalDate] = useState(new Date());
     const [done, complete] = useState(true);
-
+    const [modalIsOpen, setIsOpen] = React.useState(false);
     const addTask = () => { 
         if (input !== "") { 
             const taskToAdd = { 
@@ -40,6 +41,7 @@ const ListComponent = (props) => {
     } 
 
     const editTask = (index) => { 
+        openModal();
         let updatedList = [...list]; 
         const editedItemTitle = prompt('Edit the list item title:'); 
         const editedItemDetails = prompt('Edit the list item details:'); 
@@ -52,18 +54,32 @@ const ListComponent = (props) => {
 
     const handleChange = (id)=>{
         const filteredList = list.filter((item) => item.id !== id);
-            console.log(id)
-            if(id ==="done")
-            {
-                if(done===true){
-                    console.log(id)
-              }
-
+        if(id ==="done")
+        {
+            if(done===true){
+                console.log(id)
             }
-            setList(filteredList); 
-       
+        }
+        setList(filteredList);
+    }
+    const customStyles = {
+        content: {
+            top: '50%',
+            left: '50%',
+            right: 'auto',
+            bottom: 'auto',
+            marginRight: '-50%',
+            transform: 'translate(-50%, -50%)',
+        },
+    };
+
+    function openModal() {
+        setIsOpen(true);
     }
 
+    function closeModal() {
+        setIsOpen(false);
+    }
 
     return(
             <Container> 
@@ -153,6 +169,17 @@ const ListComponent = (props) => {
                             })} 
                         </ListGroup> 
                     </Col> 
+                </Row>
+                <Row>
+                    <Modal
+                        isOpen={modalIsOpen}
+                        onRequestClose={closeModal}
+                        style={customStyles}
+                        contentLabel="Editing Modal"
+                    >
+                        <button onClick={closeModal}>Close</button>
+                    <p>'this is the modal'</p>
+                    </Modal>
                 </Row>
             </Container> 
 
