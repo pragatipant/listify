@@ -6,6 +6,7 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button"; 
 import InputGroup from "react-bootstrap/InputGroup"; 
 import FormControl from "react-bootstrap/FormControl"; 
+import FormLabel from "react-bootstrap/FormLabel"; 
 import ListGroup from "react-bootstrap/ListGroup"; 
 import Calendar from 'react-calendar';
 import Popup from 'reactjs-popup';
@@ -19,7 +20,10 @@ const ListComponent = (props) => {
     const [showCal, setShowCal] = useState(false);
     const [calDate, setCalDate] = useState(new Date());
     const [done, complete] = useState(true);
-    const [modalIsOpen, setIsOpen] = React.useState(false);
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [currentTaskPointer, setCurrentTaskPointer] = useState('');
+    const [currentTaskTitleChangePointer, setCurrentTaskTitleChangePointer] = useState('');
+    const [currentTaskDetailsChangePointer, setCurrentTaskDetailsChangePointer] = useState('');
     const addTask = () => { 
         if (input !== "") { 
             const taskToAdd = { 
@@ -40,16 +44,13 @@ const ListComponent = (props) => {
         setList(filteredList); 
     } 
 
-    const editTask = (index) => { 
-        openModal();
-        let updatedList = [...list]; 
-        const editedItemTitle = prompt('Edit the list item title:'); 
-        const editedItemDetails = prompt('Edit the list item details:'); 
-        if (editedItemTitle !== null && editedItemTitle.trim() !== '') { 
-            updatedList[index].title= editedItemTitle 
-            updatedList[index].details= editedItemDetails 
-            setList(updatedList); 
-        } 
+    const editTask = () => {
+        let updatedList = [...list];
+        if (currentTaskPointer !== '') {    // update current task title and details
+            updatedList[currentTaskPointer].title = currentTaskTitleChangePointer;
+            updatedList[currentTaskPointer].details = currentTaskDetailsChangePointer;
+            setList(updatedList);
+        }
     }
 
     const handleChange = (id)=>{
@@ -73,12 +74,16 @@ const ListComponent = (props) => {
         },
     };
 
-    function openModal() {
-        setIsOpen(true);
+    function openModal(id) {
+        setCurrentTaskPointer(id);  // can only edit one task at a time
+                                    // so add a tracker for what task that is
+        setModalIsOpen(true);
     }
 
+
     function closeModal() {
-        setIsOpen(false);
+        setModalIsOpen(false);
+        editTask();
     }
 
     return(
@@ -110,7 +115,7 @@ const ListComponent = (props) => {
                                 size="lg"
                                 value={input} 
                                 onChange={(item) => setInput(item.target.value)} 
-                                aria-label="add something"
+                                aria-label="add-item"
                                 aria-describedby="basic-addon2"
                             />
                             <Button 
@@ -158,7 +163,7 @@ const ListComponent = (props) => {
                                                     Delete 
                                                 </Button> 
                                                 <Button variant = "light"
-                                                    onClick={() => editTask(id)}> 
+                                                    onClick={() => openModal(id)}> 
                                                     Edit 
                                                 </Button> 
                                               <input type = "checkbox" value={done} onChange={()=>handleChange("done")} /> done
@@ -177,8 +182,25 @@ const ListComponent = (props) => {
                         style={customStyles}
                         contentLabel="Editing Modal"
                     >
-                        <button onClick={closeModal}>Close</button>
-                    <p>'this is the modal'</p>
+                        <FormLabel>New Task Title</FormLabel>
+                        <FormControl 
+                                placeholder="Add new title"
+                                size="md"
+                                onChange={(title) => setCurrentTaskTitleChangePointer(title.target.value)} 
+                                aria-label="edit-item-title"
+                                aria-describedby="basic-addon2"
+                            />
+                            <br/>
+                            <FormLabel>New Task Details</FormLabel>
+                             <FormControl 
+                                placeholder="Add new details"
+                                size="md"
+                                onChange={(details) => setCurrentTaskDetailsChangePointer(details.target.value)} 
+                                aria-label="edit-item-details"
+                                aria-describedby="basic-addon2"
+                            />
+                        <br/>
+                        <Button onClick={closeModal}>Save</Button>
                     </Modal>
                 </Row>
             </Container> 
