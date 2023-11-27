@@ -6,9 +6,11 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button"; 
 import InputGroup from "react-bootstrap/InputGroup"; 
 import FormControl from "react-bootstrap/FormControl"; 
+import FormLabel from "react-bootstrap/FormLabel"; 
 import ListGroup from "react-bootstrap/ListGroup"; 
 import Calendar from 'react-calendar';
 import Popup from 'reactjs-popup';
+import Modal from 'react-modal';
 import 'reactjs-popup/dist/index.css';
 
 
@@ -17,6 +19,10 @@ const ListComponent = (props) => {
     const [list, setList] = useState([]);
     const [showCal, setShowCal] = useState(false);
     const [calDate, setCalDate] = useState(new Date());
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [currentTaskPointer, setCurrentTaskPointer] = useState('');
+    const [currentTaskTitleChangePointer, setCurrentTaskTitleChangePointer] = useState('');
+    const [currentTaskDetailsChangePointer, setCurrentTaskDetailsChangePointer] = useState('');
 
     const addTask = () => { 
         if (input !== "") { 
@@ -39,15 +45,13 @@ const ListComponent = (props) => {
         setList(filteredList); 
     } 
 
-    const editTask = (index) => { 
-        let updatedList = [...list]; 
-        const editedItemTitle = prompt('Edit the list item title:'); 
-        const editedItemDetails = prompt('Edit the list item details:'); 
-        if (editedItemTitle !== null && editedItemTitle.trim() !== '') { 
-            updatedList[index].title= editedItemTitle 
-            updatedList[index].details= editedItemDetails 
-            setList(updatedList); 
-        } 
+    const editTask = () => {
+        let updatedList = [...list];
+        if (currentTaskPointer !== '') {    // update current task title and details
+            updatedList[currentTaskPointer].title = currentTaskTitleChangePointer;
+            updatedList[currentTaskPointer].details = currentTaskDetailsChangePointer;
+            setList(updatedList);
+        }
     }
 
     const updateIfCompleted = (index)=>{
@@ -57,6 +61,28 @@ const ListComponent = (props) => {
         setList(updatedList);
     }
 
+    const customStyles = {
+        content: {
+            top: '50%',
+            left: '50%',
+            right: 'auto',
+            bottom: 'auto',
+            marginRight: '-50%',
+            transform: 'translate(-50%, -50%)',
+        },
+    };
+
+    function openModal(id) {
+        setCurrentTaskPointer(id);  // can only edit one task at a time
+                                    // so add a tracker for what task that is
+        setModalIsOpen(true);
+    }
+
+
+    function closeModal() {
+        setModalIsOpen(false);
+        editTask();
+    }
 
     return(
             <Container> 
@@ -87,7 +113,7 @@ const ListComponent = (props) => {
                                 size="lg"
                                 value={input} 
                                 onChange={(item) => setInput(item.target.value)} 
-                                aria-label="add something"
+                                aria-label="add-item"
                                 aria-describedby="basic-addon2"
                             />
                             <Button 
@@ -135,10 +161,10 @@ const ListComponent = (props) => {
                                                     variant = "light"
                                                     onClick={() => deleteTask(item.id)}> 
                                                     Delete 
-                                                </Button> 
+                                                </Button>
                                                 <Button style={{marginRight:"10px"}}
                                                     variant = "light"
-                                                    onClick={() => editTask(id)}> 
+                                                    onClick={() => openModal(id)}> 
                                                     Edit 
                                                 </Button> 
                                                 <Button variant = {item.completed ? "dark" : "light"}
@@ -152,6 +178,34 @@ const ListComponent = (props) => {
                             })} 
                         </ListGroup> 
                     </Col> 
+                </Row>
+                <Row>
+                    <Modal
+                        isOpen={modalIsOpen}
+                        onRequestClose={closeModal}
+                        style={customStyles}
+                        contentLabel="Editing Modal"
+                    >
+                        <FormLabel>New Task Title</FormLabel>
+                        <FormControl 
+                                placeholder="Add new title"
+                                size="md"
+                                onChange={(title) => setCurrentTaskTitleChangePointer(title.target.value)} 
+                                aria-label="edit-item-title"
+                                aria-describedby="basic-addon2"
+                            />
+                            <br/>
+                            <FormLabel>New Task Details</FormLabel>
+                             <FormControl 
+                                placeholder="Add new details"
+                                size="md"
+                                onChange={(details) => setCurrentTaskDetailsChangePointer(details.target.value)} 
+                                aria-label="edit-item-details"
+                                aria-describedby="basic-addon2"
+                            />
+                        <br/>
+                        <Button onClick={closeModal}>Save</Button>
+                    </Modal>
                 </Row>
             </Container> 
 
