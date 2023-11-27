@@ -19,18 +19,19 @@ const ListComponent = (props) => {
     const [list, setList] = useState([]);
     const [showCal, setShowCal] = useState(false);
     const [calDate, setCalDate] = useState(new Date());
-    const [done, complete] = useState(true);
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [currentTaskPointer, setCurrentTaskPointer] = useState('');
     const [currentTaskTitleChangePointer, setCurrentTaskTitleChangePointer] = useState('');
     const [currentTaskDetailsChangePointer, setCurrentTaskDetailsChangePointer] = useState('');
+
     const addTask = () => { 
         if (input !== "") { 
             const taskToAdd = { 
                 id: Math.random(),
                 title: input,
                 date: calDate,
-                details: ''
+                details: '',
+                completed: false,
             };
             setList([...list, taskToAdd]);
             setInput('');
@@ -53,16 +54,13 @@ const ListComponent = (props) => {
         }
     }
 
-    const handleChange = (id)=>{
-        const filteredList = list.filter((item) => item.id !== id);
-        if(id ==="done")
-        {
-            if(done===true){
-                console.log(id)
-            }
-        }
-        setList(filteredList);
+    const updateIfCompleted = (index)=>{
+        let updatedList = [...list]; 
+         
+        updatedList[index].completed=true; 
+        setList(updatedList);
     }
+
     const customStyles = {
         content: {
             top: '50%',
@@ -144,7 +142,9 @@ const ListComponent = (props) => {
                                             variant="dark"
                                             action 
                                             style={{display:"flex", justifyContent:'space-between'}}> 
-                                            {item.title} 
+                                                <span style={item.completed ? {textDecoration:"line-through"} : null} >
+                                                    {item.title}
+                                                </span>
                                             <span> 
                                                 <Popup trigger={
                                                     <Button style={{marginRight:"10px"}}
@@ -161,12 +161,16 @@ const ListComponent = (props) => {
                                                     variant = "light"
                                                     onClick={() => deleteTask(item.id)}> 
                                                     Delete 
-                                                </Button> 
-                                                <Button variant = "light"
+                                                </Button>
+                                                <Button style={{marginRight:"10px"}}
+                                                    variant = "light"
                                                     onClick={() => openModal(id)}> 
                                                     Edit 
                                                 </Button> 
-                                              <input type = "checkbox" value={done} onChange={()=>handleChange("done")} /> done
+                                                <Button variant = {item.completed ? "dark" : "light"}
+                                                    onClick={() => updateIfCompleted(id)}>
+                                                    Done
+                                                </Button> 
                                             </span> 
                                         </ListGroup.Item> 
                                     </div> 
