@@ -90,18 +90,23 @@ const ListComponent = (props) => {
         switch(filterBy) {
             case "dateCreated":
                 // filter by date itmes were created
+                setList(list.sort((a,b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0)))
                 break;
             case "title":
                 // filter alphabetically based on title
+                setList(list.sort((a,b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0)))
                 break;
             case "details":
                 // filter alphabetically based on details
+                setList(list.sort((a,b) => (a.details > b.details) ? 1 : ((b.details > a.details) ? -1 : 0)))
                 break;
             case "dueDate":
                 // filter on the due date of the item
+                setList(list.sort((a,b) => (a.date > b.date) ? 1 : ((b.date > a.date) ? -1 : 0)))
                 break;
             default:
               // filter by date itmes were created...as it already does
+              setList(list.sort((a,b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0)))
           }
     }
 
@@ -162,10 +167,10 @@ const ListComponent = (props) => {
                                 </Dropdown.Toggle>
 
                                 <Dropdown.Menu>
-                                    <Dropdown.Item href="#/dateCreated" onSelect={() => filterTasks("dateCreated")}>Date Created</Dropdown.Item>
-                                    <Dropdown.Item href="#/title" onSelect={() => filterTasks("title")}>Title</Dropdown.Item>
-                                    <Dropdown.Item href="#/details" onSelect={() => filterTasks("details")}>Details</Dropdown.Item>
-                                    <Dropdown.Item href="#/dueDate" onSelect={() => filterTasks("dueDate")}>Due Date</Dropdown.Item>
+                                    <Dropdown.Item onSelect={() => filterTasks("dateCreated")}>Date Created</Dropdown.Item>
+                                    <Dropdown.Item onSelect={() => filterTasks("title")}>Title</Dropdown.Item>
+                                    <Dropdown.Item onSelect={() => filterTasks("details")}>Details</Dropdown.Item>
+                                    <Dropdown.Item onSelect={() => filterTasks("dueDate")}>Due Date</Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
                         </InputGroup>
