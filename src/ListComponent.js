@@ -10,6 +10,7 @@ import ListGroup from "react-bootstrap/ListGroup";
 import Calendar from 'react-calendar';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
+import Dropdown from 'react-bootstrap/Dropdown';
 
 const ListComponent = (props) => { 
     const [input, setInput] = useState('');
@@ -46,6 +47,10 @@ const ListComponent = (props) => {
             updatedList[index].details= editedItemDetails 
             setList(updatedList); 
         } 
+    }
+
+    const filterTasks = (filterBy) => { 
+        // how do I sort the listgroup
     }
 
     return(
@@ -95,7 +100,25 @@ const ListComponent = (props) => {
                             {showCal && <Calendar minDate={new Date()} onChange={setCalDate} value={calDate}/>}
                         </InputGroup> 
                     </Col> 
-                </Row> 
+                </Row>
+                <Row>
+                    <Col md={{ span: 5, offset: 4 }}> 
+                        <InputGroup className="mb-3">
+                            <Dropdown>
+                                <Dropdown.Toggle variant="success" id="dropdown-basic">
+                                    Order By
+                                </Dropdown.Toggle>
+
+                                <Dropdown.Menu>
+                                    <Dropdown.Item href="#/dateCreated" onSelect={() => filterTasks("dateCreated")}>Date Created</Dropdown.Item>
+                                    <Dropdown.Item href="#/title" onSelect={() => filterTasks("title")}>Title</Dropdown.Item>
+                                    <Dropdown.Item href="#/details" onSelect={() => filterTasks("details")}>Details</Dropdown.Item>
+                                    <Dropdown.Item href="#/dueDate" onSelect={() => filterTasks("dueDate")}>Due Date</Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown>
+                        </InputGroup>
+                    </Col>
+                </Row>
                 <Row> 
                     <Col md={{ span: 5, offset: 4 }}> 
                         <ListGroup> 
