@@ -86,7 +86,23 @@ const ListComponent = (props) => {
     }
 
     const filterTasks = (filterBy) => { 
-        // how do I sort the listgroup
+        // how do I sort the listgroup???
+        switch(filterBy) {
+            case "dateCreated":
+                // filter by date itmes were created
+                break;
+            case "title":
+                // filter alphabetically based on title
+                break;
+            case "details":
+                // filter alphabetically based on details
+                break;
+            case "dueDate":
+                // filter on the due date of the item
+                break;
+            default:
+              // filter by date itmes were created...as it already does
+          }
     }
 
     return(
